@@ -39,7 +39,7 @@ namespace Kozel
         {
             get
             {
-                return isTrump;
+                return IsPermanentTrump() || isTrump;
             }
 
             set
@@ -50,16 +50,28 @@ namespace Kozel
 
         public override int GetHashCode()
         {
-            return (Suit == CardSuit.Club && Value == CardValue.Six) ? 1000 : Suit.GetHashCode() + Value.GetHashCode() + (IsTrump ? 57 : 0);
+            return Suit.GetHashCode() + Value.GetHashCode() + GetTrumpValue();
         }
-
-
-
 
         public Card(CardSuit aSuite, CardValue aValue)
         {
             suit = aSuite;
             value = aValue;
+        }
+
+        private int GetTrumpValue()
+        {
+            return IsTrump ? IsPermanentTrump() ? isShoha() ? 1000 : Value.GetHashCode() * 60 : 57 : 0;
+        }
+
+        private bool isShoha()
+        {
+            return (Suit == CardSuit.Club && Value == CardValue.Six);
+        }
+
+        private bool IsPermanentTrump()
+        {
+            return Value == CardValue.Jack || Value == CardValue.Queen || isShoha();
         }
 
         int IComparable.CompareTo(object obj)
