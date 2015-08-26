@@ -13,30 +13,15 @@ namespace Kozel
         private Team team1;
         private Team team2;
         private int activePlayer = 0;
-        private CardSuit? trumpSuit = null;
-
-        List<Player> players = new List<Player>() {new Player(), new Player(), new Player(), new Player()};
+        private int activeRound = 0;
+        List<Player> players = new List<Player>(4) { new Player(), new Player(), new Player(), new Player() };
+        List<Round> rounds = new List<Round>(8) { new Round(), new Round(), new Round(), new Round(), new Round(), new Round(), new Round(), new Round() };
 
         public Team Team1 { get  { return team1; }}
         public Team Team2 { get { return team2; } }
         public Player ActivePlayer { get { return players[activePlayer]; } }
+        public Round ActiveRound { get { return rounds[activeRound]; } }
 
-        public CardSuit TrumpSuit
-        {
-            get
-            {
-                if(trumpSuit == null)
-                {
-                    throw new ArgumentOutOfRangeException("TrumpSuit");
-                }
-                return (CardSuit)trumpSuit;
-            }
-
-            private set
-            {
-                trumpSuit = value;
-            }
-        }
 
         private CardSuit? GetTrumpSuit()
         {
@@ -82,11 +67,23 @@ namespace Kozel
             }
         }
 
+        private int GetActivePlayer()
+        {
+            for(int i = 0; i < 4; i++)
+            {
+                if (players[i].GetCards().Any(c => { return c.Suit == CardSuit.Diamond && c.Value == CardValue.Six; }))
+                    return i;
+            }
+            return 0;
+        }
+
         public void Start()
         {
+            rounds[0].TrumpSuit = CardSuit.Diamond;
             DealCards(deck, players);
-            TrumpSuit = (CardSuit)GetTrumpSuit();
-            SetTrumpCards();
+            //            TrumpSuit = (CardSuit)GetTrumpSuit();
+            activePlayer = GetActivePlayer();
+            rounds[0].SetTrumpCards(players);
             SortCards();
             if (GameStarted != null)
                 GameStarted(this, new EventArgs());
@@ -100,16 +97,7 @@ namespace Kozel
             }
         }
 
-        private void SetTrumpCards()
-        {
-            foreach (Player player in players)
-            {
-                foreach (Card card in player.GetCards())
-                {
-                    card.IsTrump = card.Suit == TrumpSuit;
-                }
-            }
-        }
+
 
         private void DealCards(Queue<Card> deck, List<Player> players)
         {

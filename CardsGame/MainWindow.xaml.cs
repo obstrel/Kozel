@@ -40,8 +40,8 @@ namespace CardsGame
 
         private void Game_CardsResorted(object sender, PlayerEventArgs e)
         {
-            Panel panel = FindPlayerPanelByPlayer(e.Player);
-            panel.Children.Clear();
+//            Panel panel = FindPlayerPanelByPlayer(e.Player);
+//            panel.Children.Clear();
         }
 
         private void Game_ActivePlayerChanged(object sender, PlayerEventArgs e)
@@ -63,7 +63,7 @@ namespace CardsGame
         private void Game_GameStarted(object sender, EventArgs e)
         {
             ShowCards(Game);
-            lTrumpSuit.Content = game.TrumpSuit;
+            lTrumpSuit.Content = game.ActiveRound.TrumpSuit;
             ActivatePlayer(game.ActivePlayer);
             game.PlayerMadeMove += Player1_PlayerMadeMove;
             game.ActivePlayerChanged += Game_ActivePlayerChanged;

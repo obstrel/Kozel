@@ -30,5 +30,15 @@ namespace Tests
             Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Queen);
             Assert.IsTrue(card2.GetHashCode() < card1.GetHashCode());
         }
+
+        [TestMethod]
+        public void Case1()
+        {
+            Kozel.Card card1 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ace);
+            Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Diamond, Kozel.CardValue.Eight);
+            card2.IsTrump = true;
+            Assert.IsTrue(card2.GetHashCode() > card1.GetHashCode());
+        }
+
     }
 }
