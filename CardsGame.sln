@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardsGame", "CardsGame\CardsGame.csproj", "{3FF3DA86-3940-4901-99D1-857DB0BD5886}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kozel", "Kozel\Kozel.csproj", "{83022376-584C-4F82-BA02-8A5FF4927443}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3FF3DA86-3940-4901-99D1-857DB0BD5886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FF3DA86-3940-4901-99D1-857DB0BD5886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FF3DA86-3940-4901-99D1-857DB0BD5886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FF3DA86-3940-4901-99D1-857DB0BD5886}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83022376-584C-4F82-BA02-8A5FF4927443}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83022376-584C-4F82-BA02-8A5FF4927443}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83022376-584C-4F82-BA02-8A5FF4927443}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83022376-584C-4F82-BA02-8A5FF4927443}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
