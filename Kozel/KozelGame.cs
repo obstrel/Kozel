@@ -87,13 +87,28 @@ namespace Kozel
             DealCards(deck, players);
             TrumpSuit = (CardSuit)GetTrumpSuit();
             SetTrumpCards();
+            SortCards();
             if (GameStarted != null)
                 GameStarted(this, new EventArgs());
         }
 
+        private void SortCards()
+        {
+            foreach(Player p in players)
+            {
+                p.SortCards();
+            }
+        }
+
         private void SetTrumpCards()
         {
-            deck.a(c => { c.Suit == TrumpSuit; c.IsTrump = true; });
+            foreach (Player player in players)
+            {
+                foreach (Card card in player.GetCards())
+                {
+                    card.IsTrump = card.Suit == TrumpSuit;
+                }
+            }
         }
 
         private void DealCards(Queue<Card> deck, List<Player> players)

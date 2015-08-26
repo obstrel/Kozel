@@ -16,7 +16,7 @@ namespace Kozel
         public void AddCard(Card card)
         {
             cards.Add(card);
-            SortCards();
+        //    SortCards();
         }
 
         public Card ThrowCard()
@@ -34,7 +34,7 @@ namespace Kozel
             return card;
         }
 
-        private void SortCards()
+        public void SortCards()
         {
             cards.Sort();
             if(CardsResorted != null)
