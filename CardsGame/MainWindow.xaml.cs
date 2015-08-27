@@ -64,7 +64,7 @@ namespace CardsGame
         {
             ShowCards(Game);
             lTrumpSuit.Content = game.ActiveRound.TrumpSuit;
-            ActivatePlayer(game.ActivePlayer);
+            ActivatePlayer(game.ActiveRound.ActivePlayer);
             game.PlayerMadeMove += Player1_PlayerMadeMove;
             game.ActivePlayerChanged += Game_ActivePlayerChanged;
             game.CardsResorted += Game_CardsResorted;
@@ -164,7 +164,7 @@ namespace CardsGame
                 {
                     (l.Parent as Panel).Children.Remove(l);
                     TablePlayer1.Children.Add(l);
-                    Game.ActivePlayer.ThrowCard(l.Tag as Card);
+                    Game.ActiveRound.NextMove(l.Tag as Card);
                 }
             }
 
