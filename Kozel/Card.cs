@@ -61,7 +61,7 @@ namespace Kozel
 
         private int GetTrumpValue()
         {
-            return IsTrump ? IsPermanentTrump() ? isShoha() ? 1000 : Value.GetHashCode() * 60 : 58 : 0;
+            return IsTrump ? IsPermanentTrump() ? isShoha() ? 1000 : Value.GetHashCode() * 60 : 60 : 0;
         }
 
         private bool isShoha()

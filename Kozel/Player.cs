@@ -10,7 +10,7 @@ namespace Kozel
     {
         List<Card> cards = new List<Card>(8);
 
-        public event EventHandler<PlayerEventArgs> PlayerMadeMove;
+        public event EventHandler<PlayerMadeMoveEventArgs> PlayerMadeMove;
         public event EventHandler<PlayerEventArgs> CardsResorted;
 
         public void AddCard(Card card)
@@ -28,9 +28,8 @@ namespace Kozel
         public Card ThrowCard(Card card)
         {
             cards.Remove(card);
-            SortCards();
             if (PlayerMadeMove != null)
-                PlayerMadeMove(this, new PlayerEventArgs(this));
+                PlayerMadeMove(this, new PlayerMadeMoveEventArgs(this, card));
             return card;
         }
 
