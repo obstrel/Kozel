@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Kozel {
     public class Round {
         private CardSuit? trumpSuit = null;
-        private List<Card> cards = new List<Card>(4);
+        private Trick Trick { get; set; }
         private List<Team> teams;
         private List<Player> players;
         private int activePlayer = 0;
@@ -64,21 +64,26 @@ namespace Kozel {
         }
 
         public void NextMove(Card card) {
-            AddCard(card);
+            AddCardToTrick(ActivePlayer, card);
             if(activePlayer < 3) {
                 activePlayer++;
             }
             else {
-
+                SetTrickOwner();
             }
 
         }
 
 
+
         #region PRIVATE METHODS ----------------------------------------------------------------------------------------
 
-        private void AddCard(Card card) {
-            cards.Add(card);
+        private void SetTrickOwner() {
+            //Trick.Cards.
+        }
+
+        private void AddCardToTrick(Player player, Card card) {
+            Trick.AddMove(card, player);
         }
 
         /// <summary>
