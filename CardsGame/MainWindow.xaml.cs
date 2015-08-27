@@ -49,7 +49,7 @@ namespace CardsGame
             ActivatePlayer(e.Player);
         }
 
-        private void Player1_PlayerMadeMove(object sender, PlayerEventArgs e)
+        private void Player1_PlayerMadeMove(object sender, PlayerMadeMoveEventArgs e)
         {
             DeactivatePlayer(e.Player);
         }

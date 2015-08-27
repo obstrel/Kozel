@@ -28,7 +28,6 @@ namespace Kozel
         public Card ThrowCard(Card card)
         {
             cards.Remove(card);
-            SortCards();
             if (PlayerMadeMove != null)
                 PlayerMadeMove(this, new PlayerMadeMoveEventArgs(this, card));
             return card;

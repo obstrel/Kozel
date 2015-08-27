@@ -41,6 +41,14 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Case2() {
+            Kozel.Card card1 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ace);
+            Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Diamond, Kozel.CardValue.Six);
+            card2.IsTrump = true;
+            Assert.IsTrue(card2.GetHashCode() > card1.GetHashCode());
+        }
+
+        [TestMethod]
         public void TrickOwnerWithTrump() {
             Kozel.Card card1 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ace);
             Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Diamond, Kozel.CardValue.Eight);

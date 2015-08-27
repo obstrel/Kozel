@@ -26,7 +26,7 @@ namespace Kozel {
         }
 
         public event EventHandler GameStarted;
-        public event EventHandler<PlayerEventArgs> PlayerMadeMove;
+        public event EventHandler<PlayerMadeMoveEventArgs> PlayerMadeMove;
         public event EventHandler<PlayerEventArgs> ActivePlayerChanged;
         public event EventHandler<PlayerEventArgs> CardsResorted;
 
@@ -35,6 +35,7 @@ namespace Kozel {
             team2 = new Team(players[1], players[3]);
             for (int i = 0; i < 8; i++) {
                 rounds.Add(new Round(Team1, Team2));
+                rounds.Last().ActivePlayerChanged += KozelGame_ActivePlayerChanged;
             }
             foreach (Player player in players) {
                 player.PlayerMadeMove += Player_PlayerMadeMove;
@@ -42,20 +43,21 @@ namespace Kozel {
             }
         }
 
+        private void KozelGame_ActivePlayerChanged(object sender, PlayerEventArgs e) {
+            if (ActivePlayerChanged != null) {
+                ActivePlayerChanged(this, e);
+            }
+        }
+
         private void Player_CardsResorted(object sender, PlayerEventArgs e) {
             if (CardsResorted != null) {
-                CardsResorted(this, new PlayerEventArgs(e.Player));
+                CardsResorted(this, e);
             }
         }
 
         private void Player_PlayerMadeMove(object sender, PlayerMadeMoveEventArgs e) {
             if (PlayerMadeMove != null)
-                PlayerMadeMove(this, new PlayerEventArgs(e.Player));
-            ActiveRound.NextMove(e.Card);
-            
-            if (ActivePlayerChanged != null) {
-                ActivePlayerChanged(this, new PlayerEventArgs(ActiveRound.ActivePlayer));
-            }
+                PlayerMadeMove(this, e);
         }
 
 
