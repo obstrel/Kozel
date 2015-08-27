@@ -43,6 +43,22 @@ namespace Kozel {
             teams = new List<Team>(2) { team1, team2 };
         }
 
+        public bool CanThrowCard(Player player, Card card) {
+            if(trick.Cards.Count == 0) {
+                return true;
+            }
+            if(trick.Cards[0].IsTrump) { 
+                if(player.Cards.Exists(c => { return c.IsTrump; }) && !card.IsTrump) {
+                    return false;
+                }
+                return true;
+            }
+            if(player.Cards.Exists(c => { return c.Suit == trick.Cards[0].Suit && !c.IsTrump; }) && (card.Suit != trick.Cards[0].Suit || card.IsTrump)) {
+                return false;
+            }
+            return true;
+        }
+
         public Team Start() {
             Queue<Card> deck = new Queue<Card>(32);
             FillDeck(deck);
@@ -51,17 +67,18 @@ namespace Kozel {
             DealCards(deck, Players);
 
             activePlayer = GetActivePlayer();
-            SetTrumpCards(Players);
+            SetTrumpCardsAndInitPlayers(Players);
             SortCards();
 
             return teams[0];
         }
 
-        public void SetTrumpCards(List<Player> players) {
+        public void SetTrumpCardsAndInitPlayers(List<Player> players) {
             foreach (Player player in players) {
-                foreach (Card card in player.GetCards()) {
+                foreach (Card card in player.Cards) {
                     card.IsTrump = card.Suit == TrumpSuit;
                 }
+                player.Round = this;
             }
         }
 
@@ -106,7 +123,7 @@ namespace Kozel {
         /// <returns></returns>
         private int GetActivePlayer() {
             for (int i = 0; i < 4; i++) {
-                if (players[i].GetCards().Any(c => { return c.Suit == CardSuit.Diamond && c.Value == CardValue.Six; }))
+                if (players[i].Cards.Any(c => { return c.Suit == CardSuit.Diamond && c.Value == CardValue.Six; }))
                     return i;
             }
             return 0;
