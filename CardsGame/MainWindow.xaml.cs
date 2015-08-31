@@ -54,6 +54,7 @@ namespace CardsGame {
 
         private void Game_GameStarted(object sender, EventArgs e) {
             ShowCards(Game);
+            InitTablePanel();
             lTrumpSuit.Content = game.ActiveRound.TrumpSuit;
             ActivatePlayer(game.ActiveRound.ActivePlayer);
             game.PlayerMadeMove += Player1_PlayerMadeMove;
@@ -61,6 +62,13 @@ namespace CardsGame {
             game.CardsResorted += Game_CardsResorted;
         }
 
+        private void InitTablePanel() {
+            TablePlayer1.Tag = game.Team1.Player1;
+            TablePlayer2.Tag = game.Team2.Player1;
+            TablePlayer3.Tag = game.Team1.Player2;
+            TablePlayer4.Tag = game.Team2.Player2;
+
+        }
 
         private void DeactivatePlayer(Player player) {
             DeactivePlayer(FindPlayerPanelByPlayer(player));
@@ -143,11 +151,21 @@ namespace CardsGame {
             if (l != null) {
                 {
                     (l.Parent as Panel).Children.Remove(l);
-                    TablePlayer1.Children.Add(l);
+                    Panel panel = FindTablePanelByPlayer(game.ActiveRound.ActivePlayer);
+                    panel.Children.Add(l);
                     Game.ActiveRound.NextMove(l.Tag as Card);
                 }
             }
 
+        }
+
+        private Panel FindTablePanelByPlayer(Player activePlayer) {
+            foreach(Panel panel in new List<Panel> { TablePlayer1, TablePlayer2, TablePlayer3, TablePlayer4 }) {
+                if(panel.Tag == activePlayer) {
+                    return panel;
+                }
+            }
+            return null;
         }
     }
 }
