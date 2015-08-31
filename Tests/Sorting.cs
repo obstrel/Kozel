@@ -64,7 +64,32 @@ namespace Tests
             t.AddMove(card2, p2);
             t.AddMove(card3, p3);
             t.AddMove(card4, p4);
-            Assert.AreEqual(t.GetTrickOwner(), p2);
+            Assert.AreEqual(t.GetTrickWinner(), p2);
+        }
+
+        [TestMethod]
+        public void CanThrowCard() {
+            Player p1 = new Player();
+            Player p2 = new Player();
+            Player p3 = new Player();
+            Player p4 = new Player();
+            Team team1 = new Team(p1, p3);
+            Team team2 = new Team(p2, p4);
+            Round round = new Round(team1, team2);
+            Kozel.Card card1 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Eight);
+            Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ten);
+            Kozel.Card card3 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ace);
+            Kozel.Card card4 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Six);
+
+            p1.AddCard(card1);
+            p2.AddCard(card2);
+            p3.AddCard(card3);
+            p4.AddCard(card4);
+            round.Trick.AddMove(card1, p1);
+            round.Trick.AddMove(card2, p2);
+            round.Trick.AddMove(card3, p3);
+            // round.Trick.AddMove(card4, p4);
+            Assert.IsTrue(round.CanThrowCard(p4, card1));
         }
 
         [TestMethod]
@@ -82,7 +107,7 @@ namespace Tests
             t.AddMove(card2, p2);
             t.AddMove(card3, p3);
             t.AddMove(card4, p4);
-            Assert.AreEqual(t.GetTrickOwner(), p3);
+            Assert.AreEqual(t.GetTrickWinner(), p3);
         }
         [TestMethod]
         public void TrickOwnerPermTrump() {
@@ -100,7 +125,7 @@ namespace Tests
             t.AddMove(card2, p2);
             t.AddMove(card3, p3);
             t.AddMove(card4, p4);
-            Assert.AreEqual(t.GetTrickOwner(), p1);
+            Assert.AreEqual(t.GetTrickWinner(), p1);
         }
         [TestMethod]
         public void TrickOwnerSuitWithoutTrump() {
@@ -117,7 +142,7 @@ namespace Tests
             t.AddMove(card2, p2);
             t.AddMove(card3, p3);
             t.AddMove(card4, p4);
-            Assert.AreEqual(t.GetTrickOwner(), p4);
+            Assert.AreEqual(t.GetTrickWinner(), p4);
         }
 
         [TestMethod]
@@ -135,7 +160,7 @@ namespace Tests
             t.AddMove(card2, p2);
             t.AddMove(card3, p3);
             t.AddMove(card4, p4);
-            Assert.AreEqual(t.GetTrickOwner(), p1);
+            Assert.AreEqual(t.GetTrickWinner(), p1);
         }
 
     }

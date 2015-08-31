@@ -12,6 +12,8 @@ namespace Kozel {
         private List<Player> players;
         private int activePlayer = 0;
 
+        public Trick Trick {  get { return trick; } }
+
         public CardSuit TrumpSuit {
             get {
                 if (trumpSuit == null) {
@@ -38,6 +40,8 @@ namespace Kozel {
         }
 
         public event EventHandler<PlayerEventArgs> ActivePlayerChanged;
+        public event EventHandler<RoundFinishedEventArgs> RoundFinished;
+        public event EventHandler<PlayerEventArgs> RoundStarted;
 
         public Round(Team team1, Team team2) {
             teams = new List<Team>(2) { team1, team2 };
@@ -59,18 +63,24 @@ namespace Kozel {
             return true;
         }
 
-        public Team Start() {
+        public Team Start(Player startRoundPlayer) {
             Queue<Card> deck = new Queue<Card>(32);
             FillDeck(deck);
 
             TrumpSuit = CardSuit.Diamond;
             DealCards(deck, Players);
 
-            activePlayer = GetActivePlayer();
+            activePlayer = startRoundPlayer == null ? GetActivePlayer() : FindPlayerIndexByPlayer(startRoundPlayer);
             SetTrumpCardsAndInitPlayers(Players);
             SortCards();
-
+            if(RoundStarted != null) {
+                RoundStarted(this, new PlayerEventArgs(ActivePlayer));
+            }
             return teams[0];
+        }
+
+        private int FindPlayerIndexByPlayer(Player startRoundPlayer) {
+            return players.FindIndex(p => { return p == startRoundPlayer; });
         }
 
         public void SetTrumpCardsAndInitPlayers(List<Player> players) {
@@ -91,10 +101,21 @@ namespace Kozel {
             else {
                 activePlayer = 0;
             }
-            if (ActivePlayerChanged != null) {
+            if (ActivePlayerChanged != null && trick.Cards.Count != 4) {
                 ActivePlayerChanged(this, new PlayerEventArgs(ActivePlayer));
             }
+            if(trick.Cards.Count == 4) {
+                if (ActivePlayerChanged != null) {
+                    ActivePlayerChanged(this, new PlayerEventArgs(null));
+                }
+                if (RoundFinished != null) {
+                    Player winner = trick.GetTrickWinner();
+                    trick.Owner = (Team1.Player1 == winner) || (Team1.Player2 == winner) ? Team1 : Team2;
+                    RoundFinished(this, new RoundFinishedEventArgs(trick.GetTrickWinner(), trick.Owner));
+                }
+             }
         }
+
 
 
 

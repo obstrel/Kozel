@@ -16,6 +16,7 @@
             <StackPanel x:Name="Player2" Height="205" Canvas.Left="339" Canvas.Top="57" Width="161"/>
             <WrapPanel x:Name="Player3" Height="58" Canvas.Left="21" Canvas.Top="267" Width="417"/>
             <StackPanel x:Name="Player4" Height="205" Canvas.Left="21" Canvas.Top="57" Width="141"/>
+            <Label x:Name="lLastWinner" Content="Label" Canvas.Left="10" Canvas.Top="36"/>
 
         </Canvas>
     </Viewbox>
