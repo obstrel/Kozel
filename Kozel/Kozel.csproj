@@ -40,11 +40,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Card.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="KozelGame.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerMadeMoveArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Round.cs" />
+    <Compile Include="RoundFinishedEventArgs.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Trick.cs" />
   </ItemGroup>

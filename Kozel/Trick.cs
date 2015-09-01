@@ -24,7 +24,7 @@ namespace Kozel {
             moves.Add(card, player);
         }
 
-        public Player GetTrickOwner() {
+        public Player GetTrickWinner() {
             if(HasTrump)
                 return moves[moves.Keys.Max()];
 

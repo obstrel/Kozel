@@ -12,6 +12,8 @@ namespace Kozel {
         private List<Player> players;
         private int activePlayer = 0;
 
+        public Trick Trick {  get { return trick; } }
+
         public CardSuit TrumpSuit {
             get {
                 if (trumpSuit == null) {
@@ -38,6 +40,8 @@ namespace Kozel {
         }
 
         public event EventHandler<PlayerEventArgs> ActivePlayerChanged;
+        public event EventHandler<RoundFinishedEventArgs> RoundFinished;
+        public event EventHandler<PlayerEventArgs> RoundStarted;
 
         public Round(Team team1, Team team2) {
             teams = new List<Team>(2) { team1, team2 };
@@ -59,18 +63,19 @@ namespace Kozel {
             return true;
         }
 
-        public Team Start() {
-            Queue<Card> deck = new Queue<Card>(32);
-            FillDeck(deck);
-
+        public Team Start(Player startRoundPlayer) {
             TrumpSuit = CardSuit.Diamond;
-            DealCards(deck, Players);
-
-            activePlayer = GetActivePlayer();
+            activePlayer = startRoundPlayer == null ? GetActivePlayer() : FindPlayerIndexByPlayer(startRoundPlayer);
             SetTrumpCardsAndInitPlayers(Players);
             SortCards();
-
+            if(RoundStarted != null) {
+                RoundStarted(this, new PlayerEventArgs(ActivePlayer));
+            }
             return teams[0];
+        }
+
+        private int FindPlayerIndexByPlayer(Player startRoundPlayer) {
+            return Players.FindIndex(p => { return p == startRoundPlayer; });
         }
 
         public void SetTrumpCardsAndInitPlayers(List<Player> players) {
@@ -91,17 +96,29 @@ namespace Kozel {
             else {
                 activePlayer = 0;
             }
-            if (ActivePlayerChanged != null) {
+            if (ActivePlayerChanged != null && trick.Cards.Count != 4) {
                 ActivePlayerChanged(this, new PlayerEventArgs(ActivePlayer));
             }
+            if(trick.Cards.Count == 4) {
+                if (ActivePlayerChanged != null) {
+                    ActivePlayerChanged(this, new PlayerEventArgs(null));
+                }
+                SetTrickOwner();
+                if (RoundFinished != null) {
+                    RoundFinished(this, new RoundFinishedEventArgs(trick.GetTrickWinner(), trick.Owner));
+                }
+             }
         }
+
 
 
 
         #region PRIVATE METHODS ----------------------------------------------------------------------------------------
 
         private void SetTrickOwner() {
-            //Trick.Cards.
+            Player winner = trick.GetTrickWinner();
+            Trick.Owner = (Team1.Player1 == winner) || (Team1.Player2 == winner) ? Team1 : Team2;
+            Trick.Owner.AddTrick(trick);
         }
 
         private void AddCardToTrick(Player player, Card card) {
@@ -123,50 +140,14 @@ namespace Kozel {
         /// <returns></returns>
         private int GetActivePlayer() {
             for (int i = 0; i < 4; i++) {
-                if (players[i].Cards.Any(c => { return c.Suit == CardSuit.Diamond && c.Value == CardValue.Six; }))
+                if (Players[i].Cards.Any(c => { return c.Suit == CardSuit.Diamond && c.Value == CardValue.Six; }))
                     return i;
             }
             return 0;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="deck"></param>
-        /// <param name="players"></param>
-        private void DealCards(Queue<Card> deck, List<Player> players) {
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 4; j++) {
-                    players[j].AddCard(deck.Dequeue());
-                }
-            }
-        }
+ 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="deck"></param>
-        private void FillDeck(Queue<Card> deck) {
-            List<Card> cardList = new List<Card> {
-                new Card(CardSuit.Diamond, CardValue.Six), new Card(CardSuit.Heart, CardValue.Six), new Card(CardSuit.Spade, CardValue.Six), new Card(CardSuit.Club, CardValue.Six),
-                new Card(CardSuit.Diamond, CardValue.Eight), new Card(CardSuit.Heart, CardValue.Eight), new Card(CardSuit.Spade, CardValue.Eight), new Card(CardSuit.Club, CardValue.Eight),
-                new Card(CardSuit.Diamond, CardValue.Nine), new Card(CardSuit.Heart, CardValue.Nine), new Card(CardSuit.Spade, CardValue.Nine), new Card(CardSuit.Club, CardValue.Nine),
-                new Card(CardSuit.Diamond, CardValue.King), new Card(CardSuit.Heart, CardValue.King), new Card(CardSuit.Spade, CardValue.King), new Card(CardSuit.Club, CardValue.King),
-                new Card(CardSuit.Diamond, CardValue.Ten), new Card(CardSuit.Heart, CardValue.Ten), new Card(CardSuit.Spade, CardValue.Ten), new Card(CardSuit.Club, CardValue.Ten),
-                new Card(CardSuit.Diamond, CardValue.Ace), new Card(CardSuit.Heart, CardValue.Ace), new Card(CardSuit.Spade, CardValue.Ace), new Card(CardSuit.Club, CardValue.Ace),
-                new Card(CardSuit.Diamond, CardValue.Jack), new Card(CardSuit.Heart, CardValue.Jack), new Card(CardSuit.Spade, CardValue.Jack), new Card(CardSuit.Club, CardValue.Jack),
-                new Card(CardSuit.Diamond, CardValue.Queen), new Card(CardSuit.Heart, CardValue.Queen), new Card(CardSuit.Spade, CardValue.Queen), new Card(CardSuit.Club, CardValue.Queen),
-            };
-
-            Random rnd = new Random();
-
-            while (cardList.Count > 0) {
-                int index = rnd.Next(cardList.Count - 1);
-                deck.Enqueue(cardList[index]);
-                cardList.RemoveAt(index);
-            }
-
-        }
         #endregion ---------------------------------------------------------------------------------------
     }
 }

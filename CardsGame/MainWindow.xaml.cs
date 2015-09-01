@@ -25,6 +25,7 @@ namespace CardsGame {
 
         private KozelGame Game { get { return game; } }
         private Panel[] PlayerPanels;
+        private Panel[] TablePlayerPanels;
 
         public MainWindow() {
             InitializeComponent();
@@ -32,6 +33,7 @@ namespace CardsGame {
             Title = Kozel.KozelGame.Name;
             Game.GameStarted += Game_GameStarted;
             PlayerPanels = new Panel[4] { Player1, Player2, Player3, Player4 };
+            TablePlayerPanels = new Panel[4] { TablePlayer1, TablePlayer2, TablePlayer3, TablePlayer4 };
         }
 
         private void Game_CardsResorted(object sender, PlayerEventArgs e) {
@@ -40,7 +42,9 @@ namespace CardsGame {
         }
 
         private void Game_ActivePlayerChanged(object sender, PlayerEventArgs e) {
-            ActivatePlayer(e.Player);
+            if (e.Player != null) {
+                ActivatePlayer(e.Player);
+            }
         }
 
         private void Player1_PlayerMadeMove(object sender, PlayerMadeMoveEventArgs e) {
@@ -54,13 +58,35 @@ namespace CardsGame {
 
         private void Game_GameStarted(object sender, EventArgs e) {
             ShowCards(Game);
+            InitTablePanel();
             lTrumpSuit.Content = game.ActiveRound.TrumpSuit;
             ActivatePlayer(game.ActiveRound.ActivePlayer);
             game.PlayerMadeMove += Player1_PlayerMadeMove;
             game.ActivePlayerChanged += Game_ActivePlayerChanged;
             game.CardsResorted += Game_CardsResorted;
+            game.RoundFinished += Game_RoundFinished;
+            game.RoundStarted += Game_RoundStarted;
         }
 
+        private void Game_RoundStarted(object sender, PlayerEventArgs e) {
+            ActivatePlayer(e.Player);
+        }
+
+        private void Game_RoundFinished(object sender, RoundFinishedEventArgs e) {
+            foreach (Panel panel in TablePlayerPanels) {
+                panel.Children.Clear();
+            }
+            lLastWinner.Content = e.LastRoundWinner.ToString();
+            lScoreTeam1.Content = Game.ActiveRound.Team1.Score;
+            lScoreTeam2.Content = Game.ActiveRound.Team2.Score;
+        }
+
+        private void InitTablePanel() {
+            TablePlayer1.Tag = game.Team1.Player1;
+            TablePlayer2.Tag = game.Team2.Player1;
+            TablePlayer3.Tag = game.Team1.Player2;
+            TablePlayer4.Tag = game.Team2.Player2;
+        }
 
         private void DeactivatePlayer(Player player) {
             DeactivePlayer(FindPlayerPanelByPlayer(player));
@@ -75,6 +101,7 @@ namespace CardsGame {
             }
 
         }
+
         private void ActivatePlayer(Player player) {
             ActivePlayer(FindPlayerPanelByPlayer(player));
         }
@@ -143,11 +170,21 @@ namespace CardsGame {
             if (l != null) {
                 {
                     (l.Parent as Panel).Children.Remove(l);
-                    TablePlayer1.Children.Add(l);
+                    Panel panel = FindTablePanelByPlayer(game.ActiveRound.ActivePlayer);
+                    panel.Children.Add(l);
                     Game.ActiveRound.NextMove(l.Tag as Card);
                 }
             }
 
+        }
+
+        private Panel FindTablePanelByPlayer(Player activePlayer) {
+            foreach (Panel panel in new List<Panel> { TablePlayer1, TablePlayer2, TablePlayer3, TablePlayer4 }) {
+                if (panel.Tag == activePlayer) {
+                    return panel;
+                }
+            }
+            return null;
         }
     }
 }
