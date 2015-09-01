@@ -79,6 +79,8 @@ namespace CardsGame {
             lLastWinner.Content = e.LastRoundWinner.ToString();
             lScoreTeam1.Content = Game.ActiveRound.Team1.Score;
             lScoreTeam2.Content = Game.ActiveRound.Team2.Score;
+            lGameScoreTeam1.Content = Game.ActiveRound.Team1.GameScore;
+            lGameScoreTeam2.Content = Game.ActiveRound.Team2.GameScore;
         }
 
         private void InitTablePanel() {

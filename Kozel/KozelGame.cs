@@ -57,6 +57,10 @@ namespace Kozel {
         }
 
         private void Round_RoundFinished(object sender, RoundFinishedEventArgs e) {
+            if (activeRound >= 7) {
+                Team1.GameScore += Team2.Score < 30 ? 4 : Team2.Score < 60 ? 2 : 0;
+                Team2.GameScore += Team1.Score < 30 ? 4 : Team1.Score < 60 ? 2 : 0;
+            }
             if (RoundFinished != null) {
                 RoundFinished(this, e);
             }
@@ -65,8 +69,6 @@ namespace Kozel {
                 ActiveRound.Start(e.LastRoundWinner);
             }
             else {
-                Team1.GameScore += Team2.Score < 30 ? 4 : Team2.Score < 60 ? 2 : 0;
-                Team2.GameScore += Team1.Score < 30 ? 4 : Team1.Score < 60 ? 2 : 0;
                 if (Team1.GameScore < 12 || Team2.GameScore < 12) {
                     StartNewGame();
                 }
@@ -94,8 +96,6 @@ namespace Kozel {
 
         public void Start() {
             StartNewGame();
-            if (GameStarted != null)
-                GameStarted(this, new EventArgs());
         }
 
         public void StartNewGame() {
@@ -103,6 +103,8 @@ namespace Kozel {
             games.Add(game);
             game.Start();
             ActiveRound.Start(null);
+            if (GameStarted != null)
+                GameStarted(this, new EventArgs());
         }
     }
 }
