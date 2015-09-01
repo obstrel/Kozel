@@ -45,8 +45,6 @@ namespace CardsGame {
             if (e.Player != null) {
                 ActivatePlayer(e.Player);
             }
-            lScoreTeam1.Content = Game.ActiveRound.Team1.Score;
-            lScoreTeam2.Content = Game.ActiveRound.Team2.Score;
         }
 
         private void Player1_PlayerMadeMove(object sender, PlayerMadeMoveEventArgs e) {
@@ -79,6 +77,8 @@ namespace CardsGame {
                 panel.Children.Clear();
             }
             lLastWinner.Content = e.LastRoundWinner.ToString();
+            lScoreTeam1.Content = Game.ActiveRound.Team1.Score;
+            lScoreTeam2.Content = Game.ActiveRound.Team2.Score;
         }
 
         private void InitTablePanel() {
@@ -101,6 +101,7 @@ namespace CardsGame {
             }
 
         }
+
         private void ActivatePlayer(Player player) {
             ActivePlayer(FindPlayerPanelByPlayer(player));
         }

@@ -11,8 +11,9 @@ namespace Kozel {
         private Team team1;
         private Team team2;
         private int activeRound = 0;
-        List<Player> players = new List<Player>(4) { new Player(), new Player(), new Player(), new Player() };
-        List<Round> rounds = new List<Round>(8);
+        private List<Player> players = new List<Player>(4) { new Player(), new Player(), new Player(), new Player() };
+        private List<Round> rounds = new List<Round>(8);
+        private List<Game> games = new List<Game>();
 
         public Team Team1 { get { return team1; } }
         public Team Team2 { get { return team2; } }
@@ -50,18 +51,25 @@ namespace Kozel {
         }
 
         private void LastRound_RoundStarted(object sender, PlayerEventArgs e) {
-            if(RoundStarted != null) {
+            if (RoundStarted != null) {
                 RoundStarted(this, e);
             }
         }
 
         private void Round_RoundFinished(object sender, RoundFinishedEventArgs e) {
-            if(RoundFinished != null) {
+            if (RoundFinished != null) {
                 RoundFinished(this, e);
             }
-            if (activeRound < 8) {
+            if (activeRound < 7) {
                 activeRound++;
                 ActiveRound.Start(e.LastRoundWinner);
+            }
+            else {
+                Team1.GameScore += Team2.Score < 30 ? 4 : Team2.Score < 60 ? 2 : 0;
+                Team2.GameScore += Team1.Score < 30 ? 4 : Team1.Score < 60 ? 2 : 0;
+                if (Team1.GameScore < 12 || Team2.GameScore < 12) {
+                    StartNewGame();
+                }
             }
 
         }
@@ -85,9 +93,16 @@ namespace Kozel {
 
 
         public void Start() {
-            ActiveRound.Start(null);
+            StartNewGame();
             if (GameStarted != null)
                 GameStarted(this, new EventArgs());
+        }
+
+        public void StartNewGame() {
+            Game game = new Game(players);
+            games.Add(game);
+            game.Start();
+            ActiveRound.Start(null);
         }
     }
 }
