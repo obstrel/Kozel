@@ -45,6 +45,8 @@ namespace CardsGame {
             if (e.Player != null) {
                 ActivatePlayer(e.Player);
             }
+            lScoreTeam1.Content = Game.ActiveRound.Team1.Score;
+            lScoreTeam2.Content = Game.ActiveRound.Team2.Score;
         }
 
         private void Player1_PlayerMadeMove(object sender, PlayerMadeMoveEventArgs e) {

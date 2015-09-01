@@ -64,6 +64,7 @@ namespace Kozel {
         }
 
         public Team Start(Player startRoundPlayer) {
+
             Queue<Card> deck = new Queue<Card>(32);
             FillDeck(deck);
 
@@ -108,9 +109,8 @@ namespace Kozel {
                 if (ActivePlayerChanged != null) {
                     ActivePlayerChanged(this, new PlayerEventArgs(null));
                 }
+                SetTrickOwner();
                 if (RoundFinished != null) {
-                    Player winner = trick.GetTrickWinner();
-                    trick.Owner = (Team1.Player1 == winner) || (Team1.Player2 == winner) ? Team1 : Team2;
                     RoundFinished(this, new RoundFinishedEventArgs(trick.GetTrickWinner(), trick.Owner));
                 }
              }
@@ -122,7 +122,9 @@ namespace Kozel {
         #region PRIVATE METHODS ----------------------------------------------------------------------------------------
 
         private void SetTrickOwner() {
-            //Trick.Cards.
+            Player winner = trick.GetTrickWinner();
+            Trick.Owner = (Team1.Player1 == winner) || (Team1.Player2 == winner) ? Team1 : Team2;
+            Trick.Owner.AddTrick(trick);
         }
 
         private void AddCardToTrick(Player player, Card card) {

@@ -13,10 +13,12 @@
                 <StackPanel x:Name="TablePlayer4" Height="44" Canvas.Top="52" Width="100"/>
             </Canvas>
             <WrapPanel x:Name="Player1" Height="42" Canvas.Left="101" Canvas.Top="10" Width="337"/>
-            <StackPanel x:Name="Player2" Height="205" Canvas.Left="339" Canvas.Top="57" Width="161"/>
+            <StackPanel x:Name="Player2" Height="187" Canvas.Left="339" Canvas.Top="57" Width="161"/>
             <WrapPanel x:Name="Player3" Height="58" Canvas.Left="21" Canvas.Top="267" Width="417"/>
-            <StackPanel x:Name="Player4" Height="205" Canvas.Left="21" Canvas.Top="57" Width="141"/>
+            <StackPanel x:Name="Player4" Height="174" Canvas.Left="21" Canvas.Top="88" Width="141"/>
             <Label x:Name="lLastWinner" Content="Label" Canvas.Left="10" Canvas.Top="36"/>
+            <Label x:Name="lScoreTeam1" Content="Label" Canvas.Left="101" Canvas.Top="57" RenderTransformOrigin="1.297,0.599"/>
+            <Label x:Name="lScoreTeam2" Content="Label" Canvas.Left="469" Canvas.Top="249" RenderTransformOrigin="-0.301,-0.453"/>
 
         </Canvas>
     </Viewbox>
