@@ -12,7 +12,7 @@ namespace Kozel
         private Player player2;
         private List<Trick> tricks = new List<Trick>();
 
-
+        public bool Trumped { get { return Player1.Trumped || Player2.Trumped; } }
         public int GameScore { get; set; }
         public int Score { get { return tricks.Sum(t => { return t.Cards.Sum(c => { return c.Value.GetHashCode() > 0 ? c.Value.GetHashCode() : 0; }); }); } }
 
@@ -29,7 +29,9 @@ namespace Kozel
         public Team(Player aPlayer1, Player aPlayer2)
         {
             player1 = aPlayer1;
+            player1.Team = this;
             player2 = aPlayer2;
+            player2.Team = this;
         }
 
         public void AddTrick(Trick trick) {

@@ -49,6 +49,9 @@ namespace Kozel {
 
         public bool CanThrowCard(Player player, Card card) {
             if(trick.Cards.Count == 0) {
+                if(!player.Team.Trumped && player.Cards.Exists(c => { return !c.IsTrump; }) && player.Cards.Exists(c => { return !c.IsTrump; }) &&  card.IsTrump) {
+                    return false;
+                }
                 return true;
             }
             if(trick.Cards[0].IsTrump) { 
@@ -65,7 +68,14 @@ namespace Kozel {
 
         public Team Start(Player startRoundPlayer) {
             TrumpSuit = CardSuit.Diamond;
-            activePlayer = startRoundPlayer == null ? GetActivePlayer() : FindPlayerIndexByPlayer(startRoundPlayer);
+            if(startRoundPlayer == null) {
+                activePlayer = GetActivePlayer();
+                ActivePlayer.Trumped = true;
+            }
+            else {
+                activePlayer = FindPlayerIndexByPlayer(startRoundPlayer);
+            }
+            
             SetTrumpCardsAndInitPlayers(Players);
             SortCards();
             if(RoundStarted != null) {

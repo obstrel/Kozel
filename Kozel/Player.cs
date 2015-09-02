@@ -10,6 +10,8 @@ namespace Kozel {
 
         public Round Round { get; internal set; }
         public List<Card> Cards { get { return cards; } }
+        public bool Trumped { get; set; }
+        public Team Team { get; internal set; }
 
         public event EventHandler<PlayerMadeMoveEventArgs> PlayerMadeMove;
         public event EventHandler<PlayerEventArgs> CardsResorted;

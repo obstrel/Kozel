@@ -70,6 +70,7 @@ namespace Kozel {
             }
             else {
                 if (Team1.GameScore < 12 || Team2.GameScore < 12) {
+                    players.ForEach(p => { p.Trumped = false; });
                     StartNewGame();
                 }
             }
