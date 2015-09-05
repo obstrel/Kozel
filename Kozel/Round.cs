@@ -8,7 +8,6 @@ namespace Kozel {
     public class Round {
         private CardSuit? trumpSuit = null;
         private Trick trick = new Trick();
-        private List<Team> teams;
         private List<Player> players;
         private int activePlayer = 0;
 
@@ -28,23 +27,17 @@ namespace Kozel {
         }
 
         public Player ActivePlayer { get { return players[activePlayer]; } }
-        public Team Team1 { get { return teams[0]; } }
-        public Team Team2 { get { return teams[1]; } }
 
         public List<Player> Players {
-            get {
-                if (players == null)
-                    players = new List<Player>(4) { Team1.Player1, Team2.Player1, Team1.Player2, Team2.Player2 };
-                return players;
-            }
+            get { return players; }
         }
 
         public event EventHandler<PlayerEventArgs> ActivePlayerChanged;
         public event EventHandler<RoundFinishedEventArgs> RoundFinished;
         public event EventHandler<PlayerEventArgs> RoundStarted;
 
-        public Round(Team team1, Team team2) {
-            teams = new List<Team>(2) { team1, team2 };
+        public Round(List<Player> players) {
+            this.players = players;
         }
 
         public bool CanThrowCard(Player player, Card card) {
@@ -66,7 +59,7 @@ namespace Kozel {
             return true;
         }
 
-        public Team Start(Player startRoundPlayer) {
+        public void Start(Player startRoundPlayer) {
             TrumpSuit = CardSuit.Diamond;
             if(startRoundPlayer == null) {
                 activePlayer = GetActivePlayer();
@@ -81,7 +74,6 @@ namespace Kozel {
             if(RoundStarted != null) {
                 RoundStarted(this, new PlayerEventArgs(ActivePlayer));
             }
-            return teams[0];
         }
 
         private int FindPlayerIndexByPlayer(Player startRoundPlayer) {
@@ -127,7 +119,7 @@ namespace Kozel {
 
         private void SetTrickOwner() {
             Player winner = trick.GetTrickWinner();
-            Trick.Owner = (Team1.Player1 == winner) || (Team1.Player2 == winner) ? Team1 : Team2;
+            Trick.Owner = winner.Team;
             Trick.Owner.AddTrick(trick);
         }
 

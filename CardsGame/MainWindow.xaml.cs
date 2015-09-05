@@ -47,7 +47,7 @@ namespace CardsGame {
             }
         }
 
-        private void Player1_PlayerMadeMove(object sender, PlayerMadeMoveEventArgs e) {
+        private void Game_PlayerMadeMove(object sender, PlayerMadeMoveEventArgs e) {
             DeactivatePlayer(e.Player);
         }
 
@@ -59,9 +59,9 @@ namespace CardsGame {
         private void Game_GameStarted(object sender, EventArgs e) {
             ShowCards(Game);
             InitTablePanel();
-            lTrumpSuit.Content = game.ActiveRound.TrumpSuit;
-            ActivatePlayer(game.ActiveRound.ActivePlayer);
-            game.PlayerMadeMove += Player1_PlayerMadeMove;
+            lTrumpSuit.Content = Game.CurrentGame.ActiveRound.TrumpSuit;
+            ActivatePlayer(Game.CurrentGame.ActiveRound.ActivePlayer);
+            game.PlayerMadeMove += Game_PlayerMadeMove;
             game.ActivePlayerChanged += Game_ActivePlayerChanged;
             game.CardsResorted += Game_CardsResorted;
             game.RoundFinished += Game_RoundFinished;
@@ -77,10 +77,10 @@ namespace CardsGame {
                 panel.Children.Clear();
             }
             lLastWinner.Content = e.LastRoundWinner.ToString();
-            lScoreTeam1.Content = Game.ActiveRound.Team1.Score;
-            lScoreTeam2.Content = Game.ActiveRound.Team2.Score;
-            lGameScoreTeam1.Content = Game.ActiveRound.Team1.GameScore;
-            lGameScoreTeam2.Content = Game.ActiveRound.Team2.GameScore;
+            lScoreTeam1.Content = Game.Team1.Score;
+            lScoreTeam2.Content = Game.Team2.Score;
+            lGameScoreTeam1.Content = Game.Team1.GameScore;
+            lGameScoreTeam2.Content = Game.Team2.GameScore;
         }
 
         private void InitTablePanel() {
@@ -111,8 +111,8 @@ namespace CardsGame {
         private void ActivePlayer(Panel player) {
             player.Background = Brushes.AntiqueWhite;
             foreach (UIElement el in player.Children) {
-                if (Game.ActiveRound.CanThrowCard(player.Tag as Player, (el as Label).Tag as Card)) {
-                    (el as Label).BorderBrush = Brushes.Green;
+                if (Game.CurrentGame.ActiveRound.CanThrowCard(player.Tag as Player, (el as Label).Tag as Card)) {
+                    (el as Label).BorderBrush = Brushes.Red;
                     el.MouseMove += Label_MouseMove;
                 }
             }
@@ -172,9 +172,9 @@ namespace CardsGame {
             if (l != null) {
                 {
                     (l.Parent as Panel).Children.Remove(l);
-                    Panel panel = FindTablePanelByPlayer(game.ActiveRound.ActivePlayer);
+                    Panel panel = FindTablePanelByPlayer(Game.CurrentGame.ActiveRound.ActivePlayer);
                     panel.Children.Add(l);
-                    Game.ActiveRound.NextMove(l.Tag as Card);
+                    Game.CurrentGame.ActiveRound.NextMove(l.Tag as Card);
                 }
             }
 

@@ -37,5 +37,9 @@ namespace Kozel
         public void AddTrick(Trick trick) {
             tricks.Add(trick);
         }
+
+        public void ClearTricks() {
+            tricks.Clear();
+        }
     }
 }

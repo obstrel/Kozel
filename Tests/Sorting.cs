@@ -2,38 +2,32 @@
 using Kozel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests
-{
+namespace Tests {
     [TestClass]
-    public class Sorting
-    {
+    public class Sorting {
         [TestMethod]
-        public void SameSuite()
-        {
+        public void SameSuite() {
             Kozel.Card card1 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Eight);
             Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ten);
             Assert.IsTrue(card2.GetHashCode() > card1.GetHashCode());
         }
 
         [TestMethod]
-        public void PermTrump()
-        {
+        public void PermTrump() {
             Kozel.Card card1 = new Kozel.Card(Kozel.CardSuit.Diamond, Kozel.CardValue.Jack);
             Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ace);
             Assert.IsTrue(card2.GetHashCode() < card1.GetHashCode());
         }
 
         [TestMethod]
-        public void ShohaIsTop()
-        {
+        public void ShohaIsTop() {
             Kozel.Card card1 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Six);
             Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Queen);
             Assert.IsTrue(card2.GetHashCode() < card1.GetHashCode());
         }
 
         [TestMethod]
-        public void Case1()
-        {
+        public void Case1() {
             Kozel.Card card1 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ace);
             Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Diamond, Kozel.CardValue.Eight);
             card2.IsTrump = true;
@@ -75,7 +69,7 @@ namespace Tests
             Player p4 = new Player();
             Team team1 = new Team(p1, p3);
             Team team2 = new Team(p2, p4);
-            Round round = new Round(team1, team2);
+            Round round = new Round(new System.Collections.Generic.List<Player>() { p1, p2, p3, p4 });
             Kozel.Card card1 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Eight);
             Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ten);
             Kozel.Card card3 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ace);
