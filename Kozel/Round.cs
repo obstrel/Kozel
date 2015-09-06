@@ -149,6 +149,9 @@ namespace Kozel {
         /// </summary>
         /// <returns></returns>
         private int GetActivePlayer() {
+            if(Players.Exists(p => { return p.Trumped; })) {
+                return Players.FindIndex(p => { return p.Trumped; });
+            }
             for (int i = 0; i < 4; i++) {
                 if (Players[i].Cards.Any(c => { return c.Suit == CardSuit.Diamond && c.Value == CardValue.Six; }))
                     return i;

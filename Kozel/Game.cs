@@ -75,7 +75,12 @@ namespace Kozel {
         }
 
         private void Stop(Player lastRoundWinner) {
-            players.ForEach(p => { p.Trumped = false; p.Cards.Clear(); });
+            Player trumpedPlayer = players.Find(p => { return p.Trumped; });
+            trumpedPlayer.Trumped = false;
+            int index = players.IndexOf(trumpedPlayer);
+            index = index == 3 ? 0 : index + 1;
+            players.ForEach(p => { p.Cards.Clear(); });
+            players[index].Trumped = true;
             if (GameFinished != null) {
                 GameFinished(this, new GameFinishedEventArgs(lastRoundWinner));
             }
