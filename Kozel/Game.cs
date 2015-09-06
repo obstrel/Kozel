@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Kozel.Trumpnesses;
+
 namespace Kozel {
     public class Game {
         private List<Player> players;
@@ -92,6 +94,7 @@ namespace Kozel {
         /// <param name="deck"></param>
         /// <param name="players"></param>
         private void DealCards(Queue<Card> deck, List<Player> players) {
+            Trumpness trumpness = new Trumpness();
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 4; j++) {
                     players[j].AddCard(deck.Dequeue());
