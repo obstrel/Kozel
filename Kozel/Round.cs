@@ -10,6 +10,7 @@ namespace Kozel {
         private Trick trick = new Trick();
         private List<Player> players;
         private int activePlayer = 0;
+        private bool finishing = false;
 
         public Trick Trick {  get { return trick; } }
 
@@ -35,9 +36,18 @@ namespace Kozel {
         public event EventHandler<PlayerEventArgs> ActivePlayerChanged;
         public event EventHandler<RoundFinishedEventArgs> RoundFinished;
         public event EventHandler<PlayerEventArgs> RoundStarted;
+        public event EventHandler<ShohaCatchQueenEventArgs> ShohaCatchQueen;
 
         public Round(List<Player> players) {
             this.players = players;
+            this.trick.ShohaCatchQueen += Trick_ShohaCatchQueen;
+        }
+
+        private void Trick_ShohaCatchQueen(object sender, ShohaCatchQueenEventArgs e) {
+            finishing = true;
+            if(ShohaCatchQueen != null) {
+                ShohaCatchQueen(this, e);
+            }
         }
 
         public bool CanThrowCard(Player player, Card card) {
@@ -92,24 +102,22 @@ namespace Kozel {
         public void NextMove(Card card) {
             ActivePlayer.ThrowCard(card);
             AddCardToTrick(ActivePlayer, card);
-            if (activePlayer < 3) {
-                activePlayer++;
-            }
-            else {
-                activePlayer = 0;
-            }
-            if (ActivePlayerChanged != null && trick.Cards.Count != 4) {
-                ActivePlayerChanged(this, new PlayerEventArgs(ActivePlayer));
-            }
-            if(trick.Cards.Count == 4) {
-                if (ActivePlayerChanged != null) {
-                    ActivePlayerChanged(this, new PlayerEventArgs(null));
+            if (!finishing) {
+                activePlayer = activePlayer < 3 ? activePlayer + 1 : 0;
+
+                if (ActivePlayerChanged != null && trick.Cards.Count != 4) {
+                    ActivePlayerChanged(this, new PlayerEventArgs(ActivePlayer));
                 }
-                SetTrickOwner();
-                if (RoundFinished != null) {
-                    RoundFinished(this, new RoundFinishedEventArgs(trick.GetTrickWinner(), trick.Owner));
+                if (trick.Cards.Count == 4) {
+                    if (ActivePlayerChanged != null) {
+                        ActivePlayerChanged(this, new PlayerEventArgs(null));
+                    }
+                    SetTrickOwner();
+                    if (RoundFinished != null) {
+                        RoundFinished(this, new RoundFinishedEventArgs(trick.GetTrickWinner(), trick.Owner));
+                    }
                 }
-             }
+            }
         }
 
 

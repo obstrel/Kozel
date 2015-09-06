@@ -30,6 +30,8 @@ namespace Kozel {
         public event EventHandler<PlayerEventArgs> CardsResorted;
         public event EventHandler<RoundFinishedEventArgs> RoundFinished;
         public event EventHandler<PlayerEventArgs> RoundStarted;
+        public event EventHandler<GameFinishedEventArgs> GameFinished;
+
 
 
         public KozelGame() {
@@ -57,7 +59,7 @@ namespace Kozel {
             game.RoundStarted += Game_RoundStarted;
             games.Add(game);
             game.Start();
-            
+
             if (GameStarted != null)
                 GameStarted(this, new EventArgs());
         }
@@ -86,12 +88,15 @@ namespace Kozel {
         }
 
         private void Game_RoundFinished(object sender, RoundFinishedEventArgs e) {
-            if(RoundFinished != null) {
+            if (RoundFinished != null) {
                 RoundFinished(this, e);
             }
         }
 
-        private void Game_GameFinished(object sender, EventArgs e) {
+        private void Game_GameFinished(object sender, GameFinishedEventArgs e) {
+            if (GameFinished != null) {
+                GameFinished(this, e);
+            }
             if (!IsFinished) {
                 StartNewGame();
             }

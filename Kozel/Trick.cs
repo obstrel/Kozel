@@ -13,6 +13,8 @@ namespace Kozel {
             }
         }
 
+        public event EventHandler<ShohaCatchQueenEventArgs> ShohaCatchQueen;
+
         private Dictionary<Card, Player> moves = new Dictionary<Card, Player>(4);
         private bool HasTrump {
             get {
@@ -22,6 +24,15 @@ namespace Kozel {
 
         public void AddMove(Card card, Player player) {
             moves.Add(card, player);
+            if (Cards.Exists(c => { return c.isShoha(); }) && Cards.Exists(c => { return c.isClubQueen(); })) {
+                Card shoha = Cards.Find(c => { return c.isShoha(); });
+                Card clubQueen = Cards.Find(c => { return c.isClubQueen(); });
+                if (moves[shoha].Team != moves[clubQueen].Team) {
+                    if (ShohaCatchQueen != null) {
+                        ShohaCatchQueen(this, new ShohaCatchQueenEventArgs(moves[shoha]));
+                    }
+                }
+            }
         }
 
         public Player GetTrickWinner() {

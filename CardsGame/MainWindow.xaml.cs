@@ -21,6 +21,8 @@ namespace CardsGame {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        private static readonly Brush InactivePlayerPanelBrush = Brushes.White;
+
         Kozel.KozelGame game = new Kozel.KozelGame();
 
         private KozelGame Game { get { return game; } }
@@ -66,6 +68,35 @@ namespace CardsGame {
             game.CardsResorted += Game_CardsResorted;
             game.RoundFinished += Game_RoundFinished;
             game.RoundStarted += Game_RoundStarted;
+            game.GameFinished += Game_GameFinished;
+        }
+
+        private void ClearTable() {
+            foreach (Panel panel in TablePlayerPanels) {
+                panel.Children.Clear();
+            }
+        }
+
+        private void ClearPlayerPanels() {
+            foreach(Panel panel in PlayerPanels) {
+                panel.Children.Clear();
+                panel.Background = InactivePlayerPanelBrush;
+            }
+        }
+
+        private void RefreshStat(Player lastRoundWinner) {
+            lLastWinner.Content = lastRoundWinner.ToString();
+            lScoreTeam1.Content = Game.Team1.Score;
+            lScoreTeam2.Content = Game.Team2.Score;
+            lGameScoreTeam1.Content = Game.Team1.GameScore;
+            lGameScoreTeam2.Content = Game.Team2.GameScore;
+
+        }
+
+        private void Game_GameFinished(object sender, GameFinishedEventArgs e) {
+            ClearTable();
+            ClearPlayerPanels();
+            RefreshStat(e.LastRoundWinner);
         }
 
         private void Game_RoundStarted(object sender, PlayerEventArgs e) {
@@ -73,14 +104,8 @@ namespace CardsGame {
         }
 
         private void Game_RoundFinished(object sender, RoundFinishedEventArgs e) {
-            foreach (Panel panel in TablePlayerPanels) {
-                panel.Children.Clear();
-            }
-            lLastWinner.Content = e.LastRoundWinner.ToString();
-            lScoreTeam1.Content = Game.Team1.Score;
-            lScoreTeam2.Content = Game.Team2.Score;
-            lGameScoreTeam1.Content = Game.Team1.GameScore;
-            lGameScoreTeam2.Content = Game.Team2.GameScore;
+            ClearTable();
+            RefreshStat(e.LastRoundWinner);
         }
 
         private void InitTablePanel() {
@@ -92,16 +117,14 @@ namespace CardsGame {
 
         private void DeactivatePlayer(Player player) {
             DeactivePlayer(FindPlayerPanelByPlayer(player));
-
         }
 
         private void DeactivePlayer(Panel player) {
-            player.Background = Brushes.White;
+            player.Background = InactivePlayerPanelBrush;
             foreach (UIElement el in player.Children) {
                 (el as Label).BorderBrush = Brushes.Black;
                 el.MouseMove -= Label_MouseMove;
             }
-
         }
 
         private void ActivatePlayer(Player player) {

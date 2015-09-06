@@ -59,14 +59,17 @@ namespace Kozel
             value = aValue;
         }
 
+        public bool isShoha() {
+            return (Suit == CardSuit.Club && Value == CardValue.Six);
+        }
+
+        public bool isClubQueen() {
+            return (Suit == CardSuit.Club && Value == CardValue.Queen);
+        }
+
         private int GetTrumpValue()
         {
             return IsTrump ? IsPermanentTrump() ? isShoha() ? 1000 : Value.GetHashCode() * 60 : 60 : 0;
-        }
-
-        private bool isShoha()
-        {
-            return (Suit == CardSuit.Club && Value == CardValue.Six);
         }
 
         private bool IsPermanentTrump()
