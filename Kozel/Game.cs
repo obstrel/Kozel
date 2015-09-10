@@ -13,8 +13,10 @@ namespace Kozel {
         private int activeRound = 0;
         private Team Team1 { get { return players[0].Team; } }
         private Team Team2 { get { return players[1].Team; } }
+        private Trumpness trumpness;
 
         public Round ActiveRound { get { return rounds[activeRound]; } }
+        
 
         public event EventHandler<PlayerEventArgs> ActivePlayerChanged;
         public event EventHandler<RoundFinishedEventArgs> RoundFinished;
@@ -37,8 +39,8 @@ namespace Kozel {
             Queue<Card> deck = new Queue<Card>(32);
             FillDeck(deck);
 
-            DealCards(deck, this.players);
-            ActiveRound.Start(null);
+            CardSuit trumpSuit = DealCards(deck, this.players);
+            ActiveRound.Start(null, trumpSuit);
         }
 
         private void LastRound_ShohaCatchQueen(object sender, ShohaCatchQueenEventArgs e) {
@@ -93,13 +95,21 @@ namespace Kozel {
         /// </summary>
         /// <param name="deck"></param>
         /// <param name="players"></param>
-        private void DealCards(Queue<Card> deck, List<Player> players) {
-            Trumpness trumpness = new Trumpness();
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 4; j++) {
-                    players[j].AddCard(deck.Dequeue());
+        private CardSuit DealCards(Queue<Card> deck, List<Player> players) {
+            CardSuit trumpSuit = CardSuit.Diamond;
+            if (players.Exists(p => { return p.Trumped; })) {
+                trumpness = new Trumpness(deck, players);
+                trumpness.Start();
+                trumpSuit = trumpness.TrumpSuit;
+            }
+            else {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        players[j].AddCard(deck.Dequeue());
+                    }
                 }
             }
+            return trumpSuit;
         }
         
         /// <summary>

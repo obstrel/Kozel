@@ -69,8 +69,8 @@ namespace Kozel {
             return true;
         }
 
-        public void Start(Player startRoundPlayer) {
-            TrumpSuit = CardSuit.Diamond;
+        public void Start(Player startRoundPlayer, CardSuit trumpSuit) {
+            TrumpSuit = trumpSuit;
             if(startRoundPlayer == null) {
                 activePlayer = GetActivePlayer();
                 ActivePlayer.Trumped = true;
