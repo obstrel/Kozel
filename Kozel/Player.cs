@@ -8,7 +8,6 @@ namespace Kozel {
     public class Player {
         List<Card> cards = new List<Card>(8);
 
-        public Round Round { get; internal set; }
         public List<Card> Cards { get { return cards; } }
         public bool Trumped { get; set; }
         public Team Team { get; internal set; }

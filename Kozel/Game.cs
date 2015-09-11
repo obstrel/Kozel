@@ -39,8 +39,8 @@ namespace Kozel {
             Queue<Card> deck = new Queue<Card>(32);
             FillDeck(deck);
 
-            CardSuit trumpSuit = DealCards(deck, this.players);
-            ActiveRound.Start(null, trumpSuit);
+            DealCards(deck, this.players);
+            ActiveRound.Start(null);
         }
 
         private void LastRound_ShohaCatchQueen(object sender, ShohaCatchQueenEventArgs e) {
@@ -95,12 +95,10 @@ namespace Kozel {
         /// </summary>
         /// <param name="deck"></param>
         /// <param name="players"></param>
-        private CardSuit DealCards(Queue<Card> deck, List<Player> players) {
-            CardSuit trumpSuit = CardSuit.Diamond;
+        private void DealCards(Queue<Card> deck, List<Player> players) {
             if (players.Exists(p => { return p.Trumped; })) {
                 trumpness = new Trumpness(deck, players);
                 trumpness.Start();
-                trumpSuit = trumpness.TrumpSuit;
             }
             else {
                 for (int i = 0; i < 8; i++) {
@@ -109,7 +107,6 @@ namespace Kozel {
                     }
                 }
             }
-            return trumpSuit;
         }
         
         /// <summary>

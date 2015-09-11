@@ -10,7 +10,7 @@ namespace Kozel.Trumpnesses {
         private List<Player> players;
         public virtual string Name { get { return "Simple"; } }
 
-        public CardSuit TrumpSuit { get; internal set; }
+//        public CardSuit TrumpSuit { get; internal set; }
 
         public Trumpness(Queue<Card> deck, List<Player> players) {
             this.deck = deck;
@@ -29,7 +29,7 @@ namespace Kozel.Trumpnesses {
             }
             trumpedPlayer.AddCard(card);
             card.IsTrump = true;
-            this.TrumpSuit = card.Suit;
+            SetTrumpCards(deck, card.Suit);
             int trumpedPlayerIndex = players.IndexOf(trumpedPlayer);
             int playerIndex = trumpedPlayerIndex == 3 ? 0 : trumpedPlayerIndex + 1;
             for (int i = 0; i < cardCount; i++) {
@@ -42,7 +42,13 @@ namespace Kozel.Trumpnesses {
                 players[playerIndex].AddCard(card);
                 playerIndex = playerIndex == 3 ? 0 : playerIndex + 1;
             }
-
         }
+
+        private void SetTrumpCards(Queue<Card> deck, CardSuit trumpSuit) {
+            foreach (Card card in deck) {
+                card.IsTrump = card.Suit == trumpSuit;
+            }
+        }
+
     }
 }

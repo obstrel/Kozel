@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kozel {
     public class Round {
-        private CardSuit? trumpSuit = null;
+
         private Trick trick = new Trick();
         private List<Player> players;
         private int activePlayer = 0;
@@ -16,14 +16,13 @@ namespace Kozel {
 
         public CardSuit TrumpSuit {
             get {
-                if (trumpSuit == null) {
+                List<Card> cards = new List<Card>();
+                players.ForEach(p => { cards.AddRange(p.Cards); });
+                Card trumpCard = cards.First(c => { return c.IsTrump; });
+                if (trumpCard == null) {
                     throw new ArgumentOutOfRangeException("TrumpSuit is null!");
                 }
-                return (CardSuit)trumpSuit;
-            }
-
-            set {
-                trumpSuit = value;
+                return trumpCard.Suit;
             }
         }
 
@@ -69,8 +68,7 @@ namespace Kozel {
             return true;
         }
 
-        public void Start(Player startRoundPlayer, CardSuit trumpSuit) {
-            TrumpSuit = trumpSuit;
+        public void Start(Player startRoundPlayer) {
             if(startRoundPlayer == null) {
                 activePlayer = GetActivePlayer();
                 ActivePlayer.Trumped = true;
@@ -79,7 +77,6 @@ namespace Kozel {
                 activePlayer = FindPlayerIndexByPlayer(startRoundPlayer);
             }
             
-            SetTrumpCardsAndInitPlayers(Players);
             SortCards();
             if(RoundStarted != null) {
                 RoundStarted(this, new PlayerEventArgs(ActivePlayer));
@@ -90,14 +87,6 @@ namespace Kozel {
             return Players.FindIndex(p => { return p == startRoundPlayer; });
         }
 
-        public void SetTrumpCardsAndInitPlayers(List<Player> players) {
-            foreach (Player player in players) {
-                foreach (Card card in player.Cards) {
-                    card.IsTrump = card.Suit == TrumpSuit;
-                }
-                player.Round = this;
-            }
-        }
 
         public void NextMove(Card card) {
             ActivePlayer.ThrowCard(card);
