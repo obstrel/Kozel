@@ -13,10 +13,10 @@ namespace Kozel {
         private int activeRound = 0;
         private Team Team1 { get { return players[0].Team; } }
         private Team Team2 { get { return players[1].Team; } }
-        private Trumpness trumpness;
+        private TrumpnessBase trumpness;
 
         public Round ActiveRound { get { return rounds[activeRound]; } }
-        
+
 
         public event EventHandler<PlayerEventArgs> ActivePlayerChanged;
         public event EventHandler<RoundFinishedEventArgs> RoundFinished;
@@ -96,19 +96,16 @@ namespace Kozel {
         /// <param name="deck"></param>
         /// <param name="players"></param>
         private void DealCards(Queue<Card> deck, List<Player> players) {
+            TrumpnessBase trumpness;
             if (players.Exists(p => { return p.Trumped; })) {
-                trumpness = new Trumpness(deck, players);
-                trumpness.Start();
+                trumpness = new SimpleTrumpness(deck, players);
             }
             else {
-                for (int i = 0; i < 8; i++) {
-                    for (int j = 0; j < 4; j++) {
-                        players[j].AddCard(deck.Dequeue());
-                    }
-                }
+                trumpness = new NoTrumpness(deck, players);
             }
+            trumpness.Start();
         }
-        
+
         /// <summary>
         /// 
         /// </summary>

@@ -51,7 +51,9 @@
     <Compile Include="ShohaCatchQueenEventArgs.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Trick.cs" />
-    <Compile Include="Trumpnesses\Trumpness.cs" />
+    <Compile Include="Trumpnesses\NoTrumpness.cs" />
+    <Compile Include="Trumpnesses\SimpleTrumpness.cs" />
+    <Compile Include="Trumpnesses\TrumpnessBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

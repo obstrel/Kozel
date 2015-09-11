@@ -5,50 +5,49 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Kozel.Trumpnesses {
-    public class Trumpness {
-        private Queue<Card> deck;
-        private List<Player> players;
-        public virtual string Name { get { return "Simple"; } }
 
-//        public CardSuit TrumpSuit { get; internal set; }
+    abstract public class TrumpnessBase {
+        protected Queue<Card> deck;
+        protected List<Player> players;
 
-        public Trumpness(Queue<Card> deck, List<Player> players) {
+        abstract public string Name { get; }
+
+        abstract protected void TrumpPlayer(Player player);
+
+        public TrumpnessBase(Queue<Card> deck, List<Player> players) {
             this.deck = deck;
             this.players = players;
         }
 
-        public void Start() {
+        public virtual void Start() {
             Player trumpedPlayer = players.Find(p => { return p.Trumped; });
-            Card card = deck.Dequeue();
-            int cardCount = 0;
+            TrumpPlayer(trumpedPlayer);
+            DealRestCards(trumpedPlayer);
+        }
 
-            while (card.IsTrump) {
-                trumpedPlayer.AddCard(card);
-                card = deck.Dequeue();
-                cardCount++;
-            }
-            trumpedPlayer.AddCard(card);
-            card.IsTrump = true;
-            SetTrumpCards(deck, card.Suit);
+        protected void DealRestCards(Player trumpedPlayer) {
             int trumpedPlayerIndex = players.IndexOf(trumpedPlayer);
             int playerIndex = trumpedPlayerIndex == 3 ? 0 : trumpedPlayerIndex + 1;
-            for (int i = 0; i < cardCount; i++) {
+            
+            for (int i = 0; i < trumpedPlayer.Cards.Count; i++) {
                 for (int j = 0; j < 3; j++) {
                     players[playerIndex].AddCard(deck.Dequeue());
                     playerIndex = playerIndex == 3 ? 0 : playerIndex + 1;
                 }
             }
+            Card card;
             while ((card = deck.Dequeue()) != null) {
                 players[playerIndex].AddCard(card);
                 playerIndex = playerIndex == 3 ? 0 : playerIndex + 1;
             }
         }
 
-        private void SetTrumpCards(Queue<Card> deck, CardSuit trumpSuit) {
+        protected void SetTrumpCards(CardSuit trumpSuit) {
             foreach (Card card in deck) {
                 card.IsTrump = card.Suit == trumpSuit;
             }
         }
+
 
     }
 }
