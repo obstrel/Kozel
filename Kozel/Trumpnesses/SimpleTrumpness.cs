@@ -15,16 +15,14 @@ namespace Kozel.Trumpnesses {
 
         public SimpleTrumpness(Queue<Card> deck, List<Player> players) : base(deck, players) { }
 
-        protected override void TrumpPlayer(Player player) {
+        protected override void TrumpPlayer() {
             Card card = deck.Dequeue();
-            int cardCount = 0;
 
             while (card.IsTrump) {
-                player.AddCard(card);
+                TrumpedPlayer.AddCard(card);
                 card = deck.Dequeue();
-                cardCount++;
             }
-            player.AddCard(card);
+            TrumpedPlayer.AddCard(card);
             card.IsTrump = true;
             SetTrumpCards(card.Suit);
         }

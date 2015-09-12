@@ -18,12 +18,6 @@ namespace Kozel {
         public bool IsFinished { get { return Team1.GameScore >= 12 || Team2.GameScore >= 12; } }
         public Game CurrentGame { get { return games.Last(); } }
 
-        private CardSuit? GetTrumpSuit() {
-            Random r = new Random();
-            Array ar = Enum.GetValues(typeof(CardSuit));
-            return (CardSuit)ar.GetValue((int)r.Next(3));
-        }
-
         public event EventHandler GameStarted;
         public event EventHandler<PlayerMadeMoveEventArgs> PlayerMadeMove;
         public event EventHandler<PlayerEventArgs> ActivePlayerChanged;

@@ -18,7 +18,7 @@ namespace Kozel {
             get {
                 List<Card> cards = new List<Card>();
                 players.ForEach(p => { cards.AddRange(p.Cards); });
-                Card trumpCard = cards.First(c => { return c.IsTrump; });
+                Card trumpCard = cards.First(c => { return !c.IsPermanentTrump() && c.IsTrump; });
                 if (trumpCard == null) {
                     throw new ArgumentOutOfRangeException("TrumpSuit is null!");
                 }
@@ -70,8 +70,7 @@ namespace Kozel {
 
         public void Start(Player startRoundPlayer) {
             if(startRoundPlayer == null) {
-                activePlayer = GetActivePlayer();
-                ActivePlayer.Trumped = true;
+                activePlayer = GetTrumpedPlayerIndex();
             }
             else {
                 activePlayer = FindPlayerIndexByPlayer(startRoundPlayer);
@@ -137,13 +136,9 @@ namespace Kozel {
         /// 
         /// </summary>
         /// <returns></returns>
-        private int GetActivePlayer() {
+        private int GetTrumpedPlayerIndex() {
             if(Players.Exists(p => { return p.Trumped; })) {
                 return Players.FindIndex(p => { return p.Trumped; });
-            }
-            for (int i = 0; i < 4; i++) {
-                if (Players[i].Cards.Any(c => { return c.Suit == CardSuit.Diamond && c.Value == CardValue.Six; }))
-                    return i;
             }
             return 0;
         }
