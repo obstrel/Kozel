@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI\AI.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameFinishedEventArgs.cs" />
