@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kozel.AI;
 
 namespace Kozel {
     public class KozelGame {
@@ -10,7 +11,7 @@ namespace Kozel {
 
         private Team team1;
         private Team team2;
-        private List<Player> players = new List<Player>(4) { new Player(), new Player(), new Player(), new Player() };
+        private List<Player> players;
         private List<Game> games = new List<Game>();
 
         public Team Team1 { get { return team1; } }
@@ -29,6 +30,7 @@ namespace Kozel {
 
 
         public KozelGame() {
+            players = new List<Player>(4) { new Player(new StupidAI()), new Player(new StupidAI()), new Player(), new Player(new StupidAI()) };
             team1 = new Team(players[0], players[2]);
             team2 = new Team(players[1], players[3]);
             foreach (Player player in players) {

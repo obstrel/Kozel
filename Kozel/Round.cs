@@ -49,24 +49,7 @@ namespace Kozel {
             }
         }
 
-        public bool CanThrowCard(Player player, Card card) {
-            if(trick.Cards.Count == 0) {
-                if(!player.Team.Trumped && player.Cards.Exists(c => { return !c.IsTrump; }) && player.Cards.Exists(c => { return !c.IsTrump; }) &&  card.IsTrump) {
-                    return false;
-                }
-                return true;
-            }
-            if(trick.Cards[0].IsTrump) { 
-                if(player.Cards.Exists(c => { return c.IsTrump; }) && !card.IsTrump) {
-                    return false;
-                }
-                return true;
-            }
-            if(player.Cards.Exists(c => { return c.Suit == trick.Cards[0].Suit && !c.IsTrump; }) && (card.Suit != trick.Cards[0].Suit || card.IsTrump)) {
-                return false;
-            }
-            return true;
-        }
+
 
         public void Start(Player startRoundPlayer) {
             if(startRoundPlayer == null) {
@@ -88,7 +71,7 @@ namespace Kozel {
 
 
         public void NextMove(Card card) {
-            ActivePlayer.ThrowCard(card);
+            card = card == null ? ActivePlayer.ThrowCard() : ActivePlayer.ThrowCard(card);
             AddCardToTrick(ActivePlayer, card);
             if (!finishing) {
                 activePlayer = activePlayer < 3 ? activePlayer + 1 : 0;
@@ -105,13 +88,20 @@ namespace Kozel {
                         RoundFinished(this, new RoundFinishedEventArgs(trick.GetTrickWinner(), trick.Owner));
                     }
                 }
+                else {
+                    if(ActivePlayer.IsAI) {
+                        NextMove();
+                    }
+                }
             }
         }
 
 
-
-
         #region PRIVATE METHODS ----------------------------------------------------------------------------------------
+
+        private void NextMove() {
+            NextMove(null);
+        }
 
         private void SetTrickOwner() {
             Player winner = trick.GetTrickWinner();
@@ -143,7 +133,11 @@ namespace Kozel {
             return 0;
         }
 
- 
+        public bool CanThrowCard(Player player, Card card) {
+            return player.CanThrowCard(trick, card);
+        }
+
+
 
         #endregion ---------------------------------------------------------------------------------------
     }

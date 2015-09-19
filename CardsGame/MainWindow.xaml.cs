@@ -128,10 +128,10 @@ namespace CardsGame {
         }
 
         private void ActivatePlayer(Player player) {
-            ActivePlayer(FindPlayerPanelByPlayer(player));
+            ActivatePlayer(FindPlayerPanelByPlayer(player));
         }
 
-        private void ActivePlayer(Panel player) {
+        private void ActivatePlayer(Panel player) {
             player.Background = Brushes.AntiqueWhite;
             foreach (UIElement el in player.Children) {
                 if (Game.CurrentGame.ActiveRound.CanThrowCard(player.Tag as Player, (el as Label).Tag as Card)) {
