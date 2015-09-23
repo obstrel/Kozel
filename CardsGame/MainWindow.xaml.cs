@@ -32,10 +32,16 @@ namespace CardsGame {
         public MainWindow() {
             InitializeComponent();
             TableCanvas.Background = new ImageBrush() { ImageSource = new BitmapImage((new Uri("Images\\Изображение.jpg", UriKind.Relative))) };
-            Title = Kozel.KozelGame.Name;
+//            Title = Kozel.KozelGame.Name;
             Game.GameStarted += Game_GameStarted;
             PlayerPanels = new Panel[4] { Player1, Player2, Player3, Player4 };
             TablePlayerPanels = new Panel[4] { TablePlayer1, TablePlayer2, TablePlayer3, TablePlayer4 };
+        }
+
+        public override void EndInit() {
+            base.EndInit();
+            this.DataContext = new ViewModels.KozelViewModel();
+            
         }
 
         private void Game_CardsResorted(object sender, PlayerEventArgs e) {
