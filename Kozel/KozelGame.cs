@@ -4,20 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kozel.AI;
+using System.Collections.ObjectModel;
 
 namespace Kozel {
     public class KozelGame {
-        public static string Name { get { return "Kozel"; } }
+        public static readonly string Name = "Kozel";
 
         private Team team1;
         private Team team2;
-        private List<Player> players;
+        private ObservableCollection<Player> players;
         private List<Game> games = new List<Game>();
 
         public Team Team1 { get { return team1; } }
         public Team Team2 { get { return team2; } }
         public bool IsFinished { get { return Team1.GameScore >= 12 || Team2.GameScore >= 12; } }
         public Game CurrentGame { get { return games.Last(); } }
+        public ObservableCollection<Player> Players { get { return players; } }
 
         public event EventHandler GameStarted;
         public event EventHandler<PlayerMadeMoveEventArgs> PlayerMadeMove;
@@ -30,7 +32,7 @@ namespace Kozel {
 
 
         public KozelGame() {
-            players = new List<Player>(4) { new Player(new StupidAI()), new Player(new StupidAI()), new Player(), new Player(new StupidAI()) };
+            players = new ObservableCollection<Player>() { new Player(new StupidAI()), new Player(new StupidAI()), new Player(), new Player(new StupidAI()) };
             team1 = new Team(players[0], players[2]);
             team2 = new Team(players[1], players[3]);
             foreach (Player player in players) {

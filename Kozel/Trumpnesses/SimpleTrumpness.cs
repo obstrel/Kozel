@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace Kozel.Trumpnesses {
             }
         }
 
-        public SimpleTrumpness(Queue<Card> deck, List<Player> players) : base(deck, players) { }
+        public SimpleTrumpness(Queue<Card> deck, ObservableCollection<Player> players) : base(deck, players) { }
 
         protected override void TrumpPlayer() {
             Card card = deck.Dequeue();

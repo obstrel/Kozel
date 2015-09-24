@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Kozel {
     public class Round {
 
         private Trick trick = new Trick();
-        private List<Player> players;
+        private ObservableCollection<Player> players;
         private int activePlayer = 0;
         private bool finishing = false;
 
@@ -17,7 +18,7 @@ namespace Kozel {
         public CardSuit TrumpSuit {
             get {
                 List<Card> cards = new List<Card>();
-                players.ForEach(p => { cards.AddRange(p.Cards); });
+                players.ToList().ForEach(p => { cards.AddRange(p.Cards); });
                 Card trumpCard = cards.First(c => { return !c.IsPermanentTrump() && c.IsTrump; });
                 if (trumpCard == null) {
                     throw new ArgumentOutOfRangeException("TrumpSuit is null!");
@@ -28,7 +29,7 @@ namespace Kozel {
 
         public Player ActivePlayer { get { return players[activePlayer]; } }
 
-        public List<Player> Players {
+        public ObservableCollection<Player> Players {
             get { return players; }
         }
 
@@ -37,7 +38,7 @@ namespace Kozel {
         public event EventHandler<PlayerEventArgs> RoundStarted;
         public event EventHandler<ShohaCatchQueenEventArgs> ShohaCatchQueen;
 
-        public Round(List<Player> players) {
+        public Round(ObservableCollection<Player> players) {
             this.players = players;
             this.trick.ShohaCatchQueen += Trick_ShohaCatchQueen;
         }
@@ -66,7 +67,7 @@ namespace Kozel {
         }
 
         private int FindPlayerIndexByPlayer(Player startRoundPlayer) {
-            return Players.FindIndex(p => { return p == startRoundPlayer; });
+            return Players.ToList().FindIndex(p => { return p == startRoundPlayer; });
         }
 
 
@@ -127,8 +128,8 @@ namespace Kozel {
         /// </summary>
         /// <returns></returns>
         private int GetTrumpedPlayerIndex() {
-            if(Players.Exists(p => { return p.Trumped; })) {
-                return Players.FindIndex(p => { return p.Trumped; });
+            if(Players.ToList().Exists(p => { return p.Trumped; })) {
+                return Players.ToList().FindIndex(p => { return p.Trumped; });
             }
             return 0;
         }
