@@ -1,6 +1,7 @@
 ﻿using System;
 using Kozel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.ObjectModel;
 
 namespace Tests {
     [TestClass]
@@ -69,7 +70,7 @@ namespace Tests {
             Player p4 = new Player();
             Team team1 = new Team(p1, p3);
             Team team2 = new Team(p2, p4);
-            Round round = new Round(new System.Collections.Generic.List<Player>() { p1, p2, p3, p4 });
+            Round round = new Round(new ObservableCollection<Player>() { p1, p2, p3, p4 });
             Kozel.Card card1 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Eight);
             Kozel.Card card2 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ten);
             Kozel.Card card3 = new Kozel.Card(Kozel.CardSuit.Club, Kozel.CardValue.Ace);

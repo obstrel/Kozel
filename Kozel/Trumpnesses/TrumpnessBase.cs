@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,16 +8,16 @@ using System.Threading.Tasks;
 namespace Kozel.Trumpnesses {
 
     abstract public class TrumpnessBase {
-        protected Player TrumpedPlayer { get { return players.Find(p => { return p.Trumped; }); } }
+        protected Player TrumpedPlayer { get { return players.ToList().Find(p => { return p.Trumped; }); } }
 
         protected Queue<Card> deck;
-        protected List<Player> players;
+        protected ObservableCollection<Player> players;
 
         abstract public string Name { get; }
 
         abstract protected void TrumpPlayer();
 
-        public TrumpnessBase(Queue<Card> deck, List<Player> players) {
+        public TrumpnessBase(Queue<Card> deck, ObservableCollection<Player> players) {
             this.deck = deck;
             this.players = players;
         }

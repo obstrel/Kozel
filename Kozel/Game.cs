@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Kozel.Trumpnesses;
+using System.Collections.ObjectModel;
 
 namespace Kozel {
     public class Game {
-        private List<Player> players;
+        private ObservableCollection<Player> players;
         private List<Round> rounds = new List<Round>(8);
         private int activeRound = 0;
         private Team Team1 { get { return players[0].Team; } }
@@ -23,7 +24,7 @@ namespace Kozel {
         public event EventHandler<PlayerEventArgs> RoundStarted;
         public event EventHandler<GameFinishedEventArgs> GameFinished;
 
-        public Game(List<Player> players) {
+        public Game(ObservableCollection<Player> players) {
             this.players = players;
             for (int i = 0; i < 8; i++) {
                 rounds.Add(new Round(players));
@@ -79,11 +80,11 @@ namespace Kozel {
         }
 
         private void Stop(Player lastRoundWinner) {
-            Player trumpedPlayer = players.Find(p => { return p.Trumped; });
+            Player trumpedPlayer = players.First(p => { return p.Trumped; });
             trumpedPlayer.Trumped = false;
             int index = players.IndexOf(trumpedPlayer);
             index = index == 3 ? 0 : index + 1;
-            players.ForEach(p => { p.Cards.Clear(); });
+            players.ToList().ForEach(p => { p.Cards.Clear(); });
             players[index].Trumped = true;
             if (GameFinished != null) {
                 GameFinished(this, new GameFinishedEventArgs(lastRoundWinner));
@@ -95,9 +96,9 @@ namespace Kozel {
         /// </summary>
         /// <param name="deck"></param>
         /// <param name="players"></param>
-        private void DealCards(Queue<Card> deck, List<Player> players) {
+        private void DealCards(Queue<Card> deck, ObservableCollection<Player> players) {
             TrumpnessBase trumpness;
-            if (players.Exists(p => { return p.Trumped; })) {
+            if (players.ToList().Exists(p => { return p.Trumped; })) {
                 trumpness = new SimpleTrumpness(deck, players);
             }
             else {
