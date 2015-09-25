@@ -4,17 +4,26 @@
         Title="{Binding Path=Title}" Height="523.091" Width="700">
     <Viewbox Stretch="Fill">
         <Canvas x:Name="drop" Height="335"  Width="517">
-            <Button  Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click" Canvas.Left="444" Canvas.Top="296" Height="39" Width="63"/>
+            <Button  Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding NewGame}" Canvas.Left="444" Canvas.Top="296" Height="39" Width="63"/>
             <Canvas x:Name="TableCanvas" HorizontalAlignment="Left" VerticalAlignment="Top" AllowDrop="True" Canvas.Left="167" Canvas.Top="84" Height="202" Width="146" Drop="Image_Drop">
                 <StackPanel x:Name="TablePlayer1" Height="37" Canvas.Left="25" Canvas.Top="10" Width="100"/>
                 <StackPanel x:Name="TablePlayer2" Height="35" Canvas.Left="60" Canvas.Top="114" Width="113"/>
                 <StackPanel x:Name="TablePlayer3" Height="30" Canvas.Left="25" Canvas.Top="162" Width="100"/>
                 <StackPanel x:Name="TablePlayer4" Height="44" Canvas.Top="65" Width="100"/>
             </Canvas>
-            <WrapPanel x:Name="Player1" Height="42" Canvas.Left="101" Canvas.Top="44" Width="337"/>
-            <StackPanel x:Name="Player2" Height="187" Canvas.Left="346" Canvas.Top="99" Width="161"/>
-            <WrapPanel x:Name="Player3" Height="34" Canvas.Left="21" Canvas.Top="291" Width="417"/>
-            <StackPanel x:Name="Player4" Height="174" Canvas.Left="21" Canvas.Top="112" Width="141"/>
+            <ItemsControl>
+                <ItemsPanelTemplate>
+                    <WrapPanel x:Name="Player1" Tag="{Binding Player1}" Height="42" Canvas.Left="101" Canvas.Top="44" Width="337"/>
+                </ItemsPanelTemplate>
+                <ItemsControl.ItemTemplate>
+                    <ItemContainerTemplate>
+                        <Label></Label>
+                    </ItemContainerTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <StackPanel x:Name="Player2" Tag="{Binding Player2}" Height="187" Canvas.Left="346" Canvas.Top="99" Width="161"/>
+            <WrapPanel x:Name="Player3" Tag="{Binding Player3}" Height="34" Canvas.Left="21" Canvas.Top="291" Width="417"/>
+            <StackPanel x:Name="Player4" Tag="{Binding Player4}" Height="174" Canvas.Left="21" Canvas.Top="112" Width="141"/>
             <WrapPanel Height="44" Canvas.Left="1" Width="516">
                 <Label x:Name="lTrumpCaption" Content="Trump:" />
                 <Label x:Name="lTrumpSuit" MouseMove="Label_MouseMove"  Content="Label"  />
