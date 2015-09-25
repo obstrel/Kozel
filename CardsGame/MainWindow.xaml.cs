@@ -23,30 +23,20 @@ namespace CardsGame {
     public partial class MainWindow : Window {
         private static readonly Brush InactivePlayerPanelBrush = Brushes.White;
 
-        Kozel.KozelGame game = new Kozel.KozelGame();
+//        Kozel.KozelGame game = new Kozel.KozelGame();
 
-        private KozelGame Game { get { return game; } }
+//        private KozelGame Game { get { return game; } }
         private Panel[] PlayerPanels;
         private Panel[] TablePlayerPanels;
 
         public MainWindow() {
             InitializeComponent();
+            this.DataContext = new ViewModels.KozelViewModel();
             TableCanvas.Background = new ImageBrush() { ImageSource = new BitmapImage((new Uri("Images\\Изображение.jpg", UriKind.Relative))) };
 //            Title = Kozel.KozelGame.Name;
-            Game.GameStarted += Game_GameStarted;
-            PlayerPanels = new Panel[4] { Player1, Player2, Player3, Player4 };
+//            Game.GameStarted += Game_GameStarted;
+//            PlayerPanels = new Panel[4] { Player1, Player2, Player3, Player4 };
             TablePlayerPanels = new Panel[4] { TablePlayer1, TablePlayer2, TablePlayer3, TablePlayer4 };
-        }
-
-        public override void EndInit() {
-            base.EndInit();
-            this.DataContext = new ViewModels.KozelViewModel();
-            
-        }
-
-        private void Game_CardsResorted(object sender, PlayerEventArgs e) {
-            //            Panel panel = FindPlayerPanelByPlayer(e.Player);
-            //            panel.Children.Clear();
         }
 
         private void Game_ActivePlayerChanged(object sender, PlayerEventArgs e) {
@@ -65,16 +55,16 @@ namespace CardsGame {
         }
 
         private void Game_GameStarted(object sender, EventArgs e) {
-            ShowCards(Game);
+            ShowCards();
             InitTablePanel();
-            lTrumpSuit.Content = Game.CurrentGame.ActiveRound.TrumpSuit;
-            ActivatePlayer(Game.CurrentGame.ActiveRound.ActivePlayer);
-            game.PlayerMadeMove += Game_PlayerMadeMove;
-            game.ActivePlayerChanged += Game_ActivePlayerChanged;
-            game.CardsResorted += Game_CardsResorted;
-            game.RoundFinished += Game_RoundFinished;
-            game.RoundStarted += Game_RoundStarted;
-            game.GameFinished += Game_GameFinished;
+            //lTrumpSuit.Content = Game.CurrentGame.ActiveRound.TrumpSuit;
+            //ActivatePlayer(Game.CurrentGame.ActiveRound.ActivePlayer);
+            //game.PlayerMadeMove += Game_PlayerMadeMove;
+            //game.ActivePlayerChanged += Game_ActivePlayerChanged;
+            //game.CardsResorted += Game_CardsResorted;
+            //game.RoundFinished += Game_RoundFinished;
+            //game.RoundStarted += Game_RoundStarted;
+            //game.GameFinished += Game_GameFinished;
         }
 
         private void ClearTable() {
@@ -92,10 +82,10 @@ namespace CardsGame {
 
         private void RefreshStat(Player lastRoundWinner) {
             lLastWinner.Content = lastRoundWinner.ToString();
-            lScoreTeam1.Content = Game.Team1.Score;
-            lScoreTeam2.Content = Game.Team2.Score;
-            lGameScoreTeam1.Content = Game.Team1.GameScore;
-            lGameScoreTeam2.Content = Game.Team2.GameScore;
+            //lScoreTeam1.Content = Game.Team1.Score;
+            //lScoreTeam2.Content = Game.Team2.Score;
+            //lGameScoreTeam1.Content = Game.Team1.GameScore;
+            //lGameScoreTeam2.Content = Game.Team2.GameScore;
 
         }
 
@@ -115,10 +105,10 @@ namespace CardsGame {
         }
 
         private void InitTablePanel() {
-            TablePlayer1.Tag = game.Team1.Player1;
-            TablePlayer2.Tag = game.Team2.Player1;
-            TablePlayer3.Tag = game.Team1.Player2;
-            TablePlayer4.Tag = game.Team2.Player2;
+            //TablePlayer1.Tag = game.Team1.Player1;
+            //TablePlayer2.Tag = game.Team2.Player1;
+            //TablePlayer3.Tag = game.Team1.Player2;
+            //TablePlayer4.Tag = game.Team2.Player2;
         }
 
         private void DeactivatePlayer(Player player) {
@@ -140,28 +130,23 @@ namespace CardsGame {
         private void ActivatePlayer(Panel player) {
             player.Background = Brushes.AntiqueWhite;
             foreach (UIElement el in player.Children) {
-                if (Game.CurrentGame.ActiveRound.CanThrowCard(player.Tag as Player, (el as Label).Tag as Card)) {
-                    (el as Label).BorderBrush = Brushes.Red;
-                    el.MouseMove += Label_MouseMove;
-                }
+                //if (Game.CurrentGame.ActiveRound.CanThrowCard(player.Tag as Player, (el as Label).Tag as Card)) {
+                //    (el as Label).BorderBrush = Brushes.Red;
+                //    el.MouseMove += Label_MouseMove;
+                //}
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) {
-
-            Game.Start();
-
+        private void ShowCards() {
+            //ShowPlayerCards(Player1);
+            //ShowPlayerCards(Player2);
+            //ShowPlayerCards(Player3);
+            //ShowPlayerCards(Player4);
         }
 
-        private void ShowCards(Kozel.KozelGame game) {
-            ShowPlayerCards(Player1, game.Team1.Player1);
-            ShowPlayerCards(Player2, game.Team2.Player1);
-            ShowPlayerCards(Player3, game.Team1.Player2);
-            ShowPlayerCards(Player4, game.Team2.Player2);
-        }
-
-        private void ShowPlayerCards(Panel panel, Player player) {
-            panel.Tag = player;
+        private void ShowPlayerCards(Panel panel) {
+            Player player = panel.Tag as Player;
+//            panel.Tag = player;
             foreach (Card card in player.Cards) {
                 Label label = CreateLabel(card);
                 panel.Children.Add(label);
@@ -201,9 +186,9 @@ namespace CardsGame {
             if (l != null) {
                 {
                     (l.Parent as Panel).Children.Remove(l);
-                    Panel panel = FindTablePanelByPlayer(Game.CurrentGame.ActiveRound.ActivePlayer);
-                    panel.Children.Add(l);
-                    Game.CurrentGame.ActiveRound.NextMove(l.Tag as Card);
+                    //Panel panel = FindTablePanelByPlayer(Game.CurrentGame.ActiveRound.ActivePlayer);
+                    //panel.Children.Add(l);
+                    //Game.CurrentGame.ActiveRound.NextMove(l.Tag as Card);
                 }
             }
 
